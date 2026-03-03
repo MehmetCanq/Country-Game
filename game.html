@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Bayrak Tahmin</title>
+</head>
+<body>
+
+    <div class="wrapper">
+        <div class="user-bar card-face">
+            <span id="player-name">Oyuncu: ...</span>
+            <button id="logout-btn" class="theme-btn small-btn">Çıkış Yap</button>
+        </div>
+
+        <div id="loading-screen" class="card-face text-center">
+            <h2>🌍 Dünya Haritası Çekiliyor...</h2>
+        </div>
+
+        <div id="game-container" class="card-face hidden" style="width: 450px;">
+            <div class="game-header">
+                <span id="question-counter">Soru: 1/10</span>
+                <span id="score-display">Puan: 0</span>
+            </div>
+            
+            <div class="flag-wrapper">
+                <img id="flag-img" src="" alt="Ülke Bayrağı">
+            </div>
+            
+            <div id="input-section" class="game-inputs">
+                <input type="text" id="guess-name" class="theme-input" placeholder="Ülke Adı (Örn: Turkey)">
+                <input type="text" id="guess-capital" class="theme-input" placeholder="Başkent (Örn: Ankara)">
+                <input type="number" id="guess-population" class="theme-input" placeholder="Nüfus (Örn: 85000000)">
+                <button id="submit-guess" class="theme-btn">Tahmin Et</button>
+            </div>
+
+            <div id="feedback-section" class="hidden">
+                <div id="feedback-text" class="feedback-text"></div>
+                <button id="next-question" class="theme-btn secondary-btn">Sonraki Soru</button>
+            </div>
+        </div>
+
+        <div id="end-screen" class="card-face text-center hidden">
+            <h2>🎉 Oyun Bitti!</h2>
+            <p class="final-score-text">Toplam Puanın: <span id="final-score">0</span></p>
+            <button id="play-again" class="theme-btn">Tekrar Oyna</button>
+            <button id="go-home" class="theme-btn secondary-btn" style="margin-top:10px;">Ana Sayfaya Dön</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
