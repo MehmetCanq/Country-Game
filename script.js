@@ -88,14 +88,18 @@ if (document.getElementById('game-container')) {
     });
 
     
+    
     async function fetchCountries() {
         try {
             const res = await fetch('https://restcountries.com/v3.1/all?fields=cca2,name,capital,population,flags');
             allCountries = await res.json();
             
-            document.getElementById('loading-screen').classList.add('hidden');
-            document.getElementById('game-container').classList.remove('hidden');
-            startGame();
+            setTimeout(() => {
+                document.getElementById('loading-screen').classList.add('hidden');
+                document.getElementById('game-container').classList.remove('hidden');
+                startGame();
+            }, 1500); 
+
         } catch (error) {
             alert("Veriler çekilemedi. İnternet bağlantınızı kontrol edin.");
         }
