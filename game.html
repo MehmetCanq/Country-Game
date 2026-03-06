@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bayrak Tahmin - Oyun</title>
     <link rel="stylesheet" href="style.css">
-    <title>Bayrak Tahmin</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 </head>
 <body>
 
@@ -16,6 +17,17 @@
 
         <div id="loading-screen" class="card-face text-center">
             <h2>🌍 Dünya Haritası Çekiliyor...</h2>
+            <p class="subtitle">Veriler hazırlanıyor, lütfen bekleyin.</p>
+        </div>
+
+        <div id="difficulty-screen" class="card-face text-center hidden" style="width: 450px;">
+            <h2>Zorluk Seçimi</h2>
+            <p class="subtitle">Oynamak istediğiniz seviyeyi belirleyin</p>
+            <div class="diff-buttons">
+                <button class="theme-btn diff-btn" data-diff="easy">Kolay (30s)</button>
+                <button class="theme-btn diff-btn medium-btn" data-diff="medium">Orta (25s)</button>
+                <button class="theme-btn diff-btn hard-btn" data-diff="hard">Zor (20s)</button>
+            </div>
         </div>
 
         <div id="game-container" class="card-face hidden" style="width: 450px;">
@@ -24,14 +36,21 @@
                 <span id="score-display">Puan: 0</span>
             </div>
             
+            <div class="timer-container">
+                <div class="timer-bar">
+                    <div class="timer-fill" id="timer-fill"></div>
+                </div>
+                <div class="timer-text"><span id="time-text">0</span>s</div>
+            </div>
+
             <div class="flag-wrapper">
                 <img id="flag-img" src="" alt="Ülke Bayrağı">
             </div>
             
             <div id="input-section" class="game-inputs">
-                <input type="text" id="guess-name" class="theme-input" placeholder="Ülke Adı ">
-                <input type="text" id="guess-capital" class="theme-input" placeholder="Başkent ">
-                <input type="number" id="guess-population" class="theme-input" placeholder="Nüfus ">
+                <input type="text" id="guess-name" class="theme-input" placeholder="Ülke Adı (Örn: Turkey)">
+                <input type="text" id="guess-capital" class="theme-input" placeholder="Başkent (Örn: Ankara)">
+                <input type="number" id="guess-population" class="theme-input" placeholder="Nüfus (Örn: 85000000)">
                 <button id="submit-guess" class="theme-btn">Tahmin Et</button>
             </div>
 
