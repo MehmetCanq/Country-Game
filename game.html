@@ -5,69 +5,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bayrak Tahmin - Oyun</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 </head>
 <body>
-
     <div class="wrapper">
         <div class="user-bar card-face">
             <span id="player-name">Oyuncu: ...</span>
             <button id="logout-btn" class="theme-btn small-btn">Çıkış Yap</button>
         </div>
-
+        
         <div id="loading-screen" class="card-face text-center">
             <h2>🌍 Dünya Haritası Çekiliyor...</h2>
             <p class="subtitle">Veriler hazırlanıyor, lütfen bekleyin.</p>
         </div>
-
+        
         <div id="difficulty-screen" class="card-face text-center hidden" style="width: 450px;">
             <h2>Zorluk Seçimi</h2>
             <p class="subtitle">Oynamak istediğiniz seviyeyi belirleyin</p>
             <div class="diff-buttons">
-                <button class="theme-btn diff-btn" data-diff="easy">Kolay (30s)</button>
-                <button class="theme-btn diff-btn medium-btn" data-diff="medium">Orta (25s)</button>
-                <button class="theme-btn diff-btn hard-btn" data-diff="hard">Zor (20s)</button>
+                <button class="theme-btn diff-btn" data-diff="easy">Kolay</button>
+                <button class="theme-btn diff-btn medium-btn" data-diff="medium">Orta</button>
+                <button class="theme-btn diff-btn hard-btn" data-diff="hard">Zor</button>
             </div>
         </div>
-
+        
         <div id="game-container" class="card-face hidden" style="width: 450px;">
             <div class="game-header">
                 <span id="question-counter">Soru: 1/10</span>
                 <span id="score-display">Puan: 0</span>
             </div>
-            
             <div class="timer-container">
                 <div class="timer-bar">
                     <div class="timer-fill" id="timer-fill"></div>
                 </div>
                 <div class="timer-text"><span id="time-text">0</span>s</div>
             </div>
-
             <div class="flag-wrapper">
                 <img id="flag-img" src="" alt="Ülke Bayrağı">
             </div>
-            
             <div id="input-section" class="game-inputs">
-                <input type="text" id="guess-name" class="theme-input" placeholder="Ülke Adı (Örn: Turkey)">
-                <input type="text" id="guess-capital" class="theme-input" placeholder="Başkent (Örn: Ankara)">
-                <input type="number" id="guess-population" class="theme-input" placeholder="Nüfus (Örn: 85000000)">
-                <button id="submit-guess" class="theme-btn">Tahmin Et</button>
+                <input type="text" id="guess-name" class="theme-input" placeholder="Ülke Adı">
+                <input type="text" id="guess-capital" class="theme-input" placeholder="Başkent ">
+                <input type="number" id="guess-population" class="theme-input" placeholder="Nüfus ">
+                <button id="submit-guess" class="theme-btn disabled-btn" disabled>Tahmin Et</button>
+                <button id="skip-question" class="theme-btn skip-btn">Bu Soruyu Atla</button>
             </div>
-
             <div id="feedback-section" class="hidden">
                 <div id="feedback-text" class="feedback-text"></div>
                 <button id="next-question" class="theme-btn secondary-btn">Sonraki Soru</button>
             </div>
         </div>
-
-        <div id="end-screen" class="card-face text-center hidden">
+        
+        <div id="end-screen" class="card-face text-center hidden" style="width: 450px;">
             <h2>🎉 Oyun Bitti!</h2>
             <p class="final-score-text">Toplam Puanın: <span id="final-score">0</span></p>
-            <button id="play-again" class="theme-btn">Tekrar Oyna</button>
+            
+            <div class="accordion-container">
+                <button class="accordion-btn" id="btn-personal">Son 10 Oyunun ▼</button>
+                <div class="accordion-content" id="content-personal">
+                    <table id="personal-board"></table>
+                </div>
+
+                <button class="accordion-btn" id="btn-global">Global Top 10 ▼</button>
+                <div class="accordion-content" id="content-global">
+                    <table id="global-board"></table>
+                </div>
+            </div>
+
+            <button id="play-again" class="theme-btn" style="margin-top: 10px;">Tekrar Oyna</button>
             <button id="go-home" class="theme-btn secondary-btn" style="margin-top:10px;">Ana Sayfaya Dön</button>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
