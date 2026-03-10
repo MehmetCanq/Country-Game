@@ -35,7 +35,7 @@ function showMessage(mesaj) {
     if (!toast) return;
     toast.innerHTML = mesaj;
     toast.classList.add('show');
-    
+
     setTimeout(() => {
         toast.classList.remove('show');
     }, 3000);
@@ -59,10 +59,10 @@ if (document.getElementById('login-btn')) {
         const hashedPassword = await hashPassword(password);
         users.push({ username, email, password: hashedPassword });
         localStorage.setItem('flagGameUsers', JSON.stringify(users));
-        
+
         showMessage("Kayıt başarılı! Şimdi giriş yapabilirsiniz.");
         document.getElementById('register-form').reset();
-        if (toggleSwitch) toggleSwitch.checked = false; 
+        if (toggleSwitch) toggleSwitch.checked = false;
     });
 
     loginBtn.addEventListener('click', async () => {
@@ -77,7 +77,7 @@ if (document.getElementById('login-btn')) {
 
         if (user) {
             localStorage.setItem('activeUser', user.username);
-            window.location.href = "game.html"; 
+            window.location.href = "game.html";
         } else {
             showMessage("Kullanıcı adı veya şifre hatalı!");
         }
@@ -89,11 +89,11 @@ if (document.getElementById('game-container')) {
     let gameCountries = [];
     let currentQuestionIndex = 0;
     let totalScore = 0;
-    
+
     let currentDifficulty = 'medium';
-    let baseTimeLimit = 25; 
-    let currentRoundTime = 25; 
-    let animationFrameId = null; 
+    let baseTimeLimit = 25;
+    let currentRoundTime = 25;
+    let animationFrameId = null;
 
     const activeUser = localStorage.getItem('activeUser');
     if (!activeUser) {
@@ -132,12 +132,12 @@ if (document.getElementById('game-container')) {
             const res = await fetch('https://restcountries.com/v3.1/all?fields=cca2,name,capital,population,flags');
             const data = await res.json();
             allCountries = data.filter(c => c.population && c.population > 0);
-            
+
             setTimeout(() => {
                 document.getElementById('loading-screen').classList.add('hidden');
                 document.getElementById('difficulty-screen').classList.remove('hidden');
-            }, 1000); 
-            
+            }, 1000);
+
         } catch (error) {
             showMessage("Veriler çekilemedi. İnternet bağlantınızı kontrol edin.");
         }
@@ -146,25 +146,25 @@ if (document.getElementById('game-container')) {
     document.querySelectorAll('.diff-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             currentDifficulty = e.target.getAttribute('data-diff');
-            
+
             let filteredPool = [];
             if (currentDifficulty === 'easy') {
-                filteredPool = allCountries.filter(c => c.population >= 20000000); 
+                filteredPool = allCountries.filter(c => c.population >= 20000000);
                 baseTimeLimit = 30;
             } else if (currentDifficulty === 'medium') {
-                filteredPool = allCountries.filter(c => c.population >= 2000000 && c.population < 20000000); 
+                filteredPool = allCountries.filter(c => c.population >= 2000000 && c.population < 20000000);
                 baseTimeLimit = 25;
             } else if (currentDifficulty === 'hard') {
-                filteredPool = allCountries.filter(c => c.population < 2000000); 
+                filteredPool = allCountries.filter(c => c.population < 2000000);
                 baseTimeLimit = 20;
             }
 
-            currentRoundTime = baseTimeLimit; 
+            currentRoundTime = baseTimeLimit;
             let shuffled = filteredPool.sort(() => 0.5 - Math.random());
             gameCountries = shuffled.slice(0, 10);
-            
+
             history.replaceState({ sayfa: 'zorluk_divi' }, "");
-            
+
             startGame();
         });
     });
@@ -172,21 +172,21 @@ if (document.getElementById('game-container')) {
     function startGame() {
         currentQuestionIndex = 0;
         totalScore = 0;
-        
+
         document.getElementById('difficulty-screen').classList.add('hidden');
         document.getElementById('end-screen').classList.add('hidden');
         document.getElementById('game-container').classList.remove('hidden');
         history.pushState({ sayfa: 'oyun_divi' }, "");
-        
+
         loadQuestion();
     }
 
     function startTimer() {
         if (animationFrameId) cancelAnimationFrame(animationFrameId);
-        
+
         const fillEl = document.getElementById('timer-fill');
         const textEl = document.getElementById('time-text');
-        
+
         fillEl.style.width = '100%';
         fillEl.style.background = 'linear-gradient(120deg, #ff758c 0%, #ff7eb3 100%)';
         textEl.style.color = '#ff758c';
@@ -202,8 +202,8 @@ if (document.getElementById('game-container')) {
             if (progress >= 1) {
                 fillEl.style.width = '0%';
                 textEl.innerText = '0';
-                evaluateGuess(true); 
-                return; 
+                evaluateGuess(true);
+                return;
             }
 
             fillEl.style.width = (100 - (progress * 100)) + '%';
@@ -242,16 +242,16 @@ if (document.getElementById('game-container')) {
 
     function loadQuestion() {
         const country = gameCountries[currentQuestionIndex];
-        
+
         document.getElementById('question-counter').innerText = `Soru: ${currentQuestionIndex + 1}/10`;
         document.getElementById('score-display').innerText = `Puan: ${totalScore}`;
         document.getElementById('flag-img').src = country.flags.png;
-        
+
         document.getElementById('guess-name').value = '';
         document.getElementById('guess-capital').value = '';
         document.getElementById('guess-population').value = '';
-        
-        validateInputs(); 
+
+        validateInputs();
 
         document.getElementById('input-section').classList.remove('hidden');
         document.getElementById('feedback-section').classList.add('hidden');
@@ -282,7 +282,7 @@ if (document.getElementById('game-container')) {
             } else if (normalizeText(guessNameRaw) === normalizeText(actualName)) {
                 points += 10;
             } else {
-                points -= 1; 
+                points -= 1;
                 feedbackMsg += `❌ Ülke: <b>${actualName}</b> (Yanlış)<br>`;
             }
 
@@ -291,7 +291,7 @@ if (document.getElementById('game-container')) {
             } else if (normalizeText(guessCapitalRaw) === normalizeText(actualCapital)) {
                 points += 10;
             } else {
-                points -= 1; 
+                points -= 1;
                 feedbackMsg += `❌ Başkent: <b>${actualCapital || "Yok"}</b> (Yanlış)<br>`;
             }
 
@@ -299,17 +299,17 @@ if (document.getElementById('game-container')) {
                 feedbackMsg += `❌ Nüfus: <b>${actualPop.toLocaleString('tr-TR')}</b> (Boş)<br>`;
             } else {
                 const guessPop = parseInt(guessPopRaw) || 0;
-                const tolerance = actualPop * 0.10; 
+                const tolerance = actualPop * 0.10;
                 if (Math.abs(actualPop - guessPop) <= tolerance) {
                     points += 10;
                 } else {
-                    points -= 1; 
+                    points -= 1;
                     feedbackMsg += `❌ Nüfus: <b>${actualPop.toLocaleString('tr-TR')}</b> (Yanlış)<br>`;
                 }
             }
 
             if (points > 0) {
-                currentRoundTime = baseTimeLimit; 
+                currentRoundTime = baseTimeLimit;
             }
         }
 
@@ -365,10 +365,10 @@ if (document.getElementById('game-container')) {
 
     function updateScoreboards() {
         let scores = JSON.parse(localStorage.getItem('flagGameScores')) || [];
-        
+
         let personalScores = scores.filter(s => s.user === activeUser).reverse().slice(0, 10);
         let personalHTML = `<tr><th>Tarih</th><th>Puan</th></tr>`;
-        if(personalScores.length === 0) personalHTML += `<tr><td colspan="2" style="text-align:center;">Henüz oyun yok.</td></tr>`;
+        if (personalScores.length === 0) personalHTML += `<tr><td colspan="2" style="text-align:center;">Henüz oyun yok.</td></tr>`;
         personalScores.forEach(s => {
             personalHTML += `<tr><td>${s.date}</td><td>${s.score}</td></tr>`;
         });
@@ -376,7 +376,7 @@ if (document.getElementById('game-container')) {
 
         let globalScores = [...scores].sort((a, b) => b.score - a.score).slice(0, 10);
         let globalHTML = `<tr><th>Oyuncu</th><th>Puan</th></tr>`;
-        if(globalScores.length === 0) globalHTML += `<tr><td colspan="2" style="text-align:center;">Henüz skor yok.</td></tr>`;
+        if (globalScores.length === 0) globalHTML += `<tr><td colspan="2" style="text-align:center;">Henüz skor yok.</td></tr>`;
         globalScores.forEach(s => {
             globalHTML += `<tr><td>${s.user}</td><td>${s.score}</td></tr>`;
         });
@@ -387,7 +387,7 @@ if (document.getElementById('game-container')) {
         document.getElementById('game-container').classList.add('hidden');
         document.getElementById('end-screen').classList.remove('hidden');
         document.getElementById('final-score').innerText = totalScore;
-        
+
         btnPersonal.classList.remove('active');
         contentPersonal.classList.remove('show');
         btnGlobal.classList.remove('active');
