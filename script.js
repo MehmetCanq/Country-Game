@@ -5,6 +5,21 @@ async function hashPassword(password) {
     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
+window.addEventListener('popstate', (event) => {
+    if (event.state && event.state.sayfa === 'zorluk_divi') {
+        document.getElementById('game-container').classList.add('hidden');
+        document.getElementById('end-screen').classList.add('hidden');
+        document.getElementById('difficulty-screen').classList.remove('hidden');
+        history.replaceState({ sayfa: 'oyun_divi' }, "");
+    } else if (event.state && event.state.sayfa === 'oyun_divi') {
+        document.getElementById('difficulty-screen').classList.add('hidden');
+        document.getElementById('end-screen').classList.add('hidden');
+        document.getElementById('game-container').classList.remove('hidden');
+        history.replaceState({ sayfa: 'zorluk_divi' }, "");
+    }
+});
+
+
 function getUsers() {
     const users = localStorage.getItem('flagGameUsers');
     return users ? JSON.parse(users) : [];
@@ -13,6 +28,17 @@ function getUsers() {
 function normalizeText(text) {
     if (!text) return "";
     return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+}
+
+function showMessage(mesaj) {
+    const toast = document.getElementById('toast-message');
+    if (!toast) return;
+    toast.innerHTML = mesaj;
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
 }
 
 if (document.getElementById('login-btn')) {
@@ -25,16 +51,16 @@ if (document.getElementById('login-btn')) {
         const email = document.getElementById('reg-email').value.trim();
         const password = document.getElementById('reg-password').value.trim();
 
-        if (!username || !email || !password) return alert("Lütfen tüm alanları doldurun!");
+        if (!username || !email || !password) return showMessage("Lütfen tüm alanları doldurun!");
 
         const users = getUsers();
-        if (users.some(u => u.username === username)) return alert("Bu kullanıcı adı zaten alınmış!");
+        if (users.some(u => u.username === username)) return showMessage("Bu kullanıcı adı zaten alınmış!");
 
         const hashedPassword = await hashPassword(password);
         users.push({ username, email, password: hashedPassword });
         localStorage.setItem('flagGameUsers', JSON.stringify(users));
         
-        alert("Kayıt başarılı! Şimdi giriş yapabilirsiniz.");
+        showMessage("Kayıt başarılı! Şimdi giriş yapabilirsiniz.");
         document.getElementById('register-form').reset();
         if (toggleSwitch) toggleSwitch.checked = false; 
     });
@@ -43,7 +69,7 @@ if (document.getElementById('login-btn')) {
         const username = document.getElementById('login-username').value.trim();
         const password = document.getElementById('login-password').value.trim();
 
-        if (!username || !password) return alert("Kullanıcı adı ve şifre giriniz!");
+        if (!username || !password) return showMessage("Kullanıcı adı ve şifre giriniz!");
 
         const users = getUsers();
         const hashedPassword = await hashPassword(password);
@@ -53,7 +79,7 @@ if (document.getElementById('login-btn')) {
             localStorage.setItem('activeUser', user.username);
             window.location.href = "game.html"; 
         } else {
-            alert("Kullanıcı adı veya şifre hatalı!");
+            showMessage("Kullanıcı adı veya şifre hatalı!");
         }
     });
 }
@@ -113,7 +139,7 @@ if (document.getElementById('game-container')) {
             }, 1000); 
             
         } catch (error) {
-            alert("Veriler çekilemedi. İnternet bağlantınızı kontrol edin.");
+            showMessage("Veriler çekilemedi. İnternet bağlantınızı kontrol edin.");
         }
     }
 
@@ -137,6 +163,8 @@ if (document.getElementById('game-container')) {
             let shuffled = filteredPool.sort(() => 0.5 - Math.random());
             gameCountries = shuffled.slice(0, 10);
             
+            history.replaceState({ sayfa: 'zorluk_divi' }, "");
+            
             startGame();
         });
     });
@@ -148,6 +176,7 @@ if (document.getElementById('game-container')) {
         document.getElementById('difficulty-screen').classList.add('hidden');
         document.getElementById('end-screen').classList.add('hidden');
         document.getElementById('game-container').classList.remove('hidden');
+        history.pushState({ sayfa: 'oyun_divi' }, "");
         
         loadQuestion();
     }
@@ -292,7 +321,7 @@ if (document.getElementById('game-container')) {
             feedbackDiv.className = "feedback-text success";
         } else {
             let baslik = isTimeOut ? "0 Puan" : `Bu sorudan <b>${points}</b> puan aldın.`;
-            feedbackDiv.innerHTML = `${baslik}<br><br><b>Yanlışlar (Olması Gerekenler):</b><br>${feedbackMsg}`;
+            feedbackDiv.innerHTML = `${baslik}<br><br><b>Cevaplar:</b><br>${feedbackMsg}`;
             feedbackDiv.className = "feedback-text error";
         }
 

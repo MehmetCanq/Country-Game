@@ -1,23 +1,27 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bayrak Tahmin - Oyun</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+    <div id="toast-message" class="toast"></div>
+
     <div class="wrapper">
         <div class="user-bar card-face">
             <span id="player-name">Oyuncu: ...</span>
             <button id="logout-btn" class="theme-btn small-btn">Çıkış Yap</button>
         </div>
-        
+
         <div id="loading-screen" class="card-face text-center">
             <h2>🌍 Dünya Haritası Çekiliyor...</h2>
             <p class="subtitle">Veriler hazırlanıyor, lütfen bekleyin.</p>
         </div>
-        
+
         <div id="difficulty-screen" class="card-face text-center hidden" style="width: 450px;">
             <h2>Zorluk Seçimi</h2>
             <p class="subtitle">Oynamak istediğiniz seviyeyi belirleyin</p>
@@ -25,9 +29,10 @@
                 <button class="theme-btn diff-btn" data-diff="easy">Kolay</button>
                 <button class="theme-btn diff-btn medium-btn" data-diff="medium">Orta</button>
                 <button class="theme-btn diff-btn hard-btn" data-diff="hard">Zor</button>
+                <button class="skor-btn" data-diff="skor">Skorlar</button>
             </div>
         </div>
-        
+
         <div id="game-container" class="card-face hidden" style="width: 450px;">
             <div class="game-header">
                 <span id="question-counter">Soru: 1/10</span>
@@ -44,8 +49,8 @@
             </div>
             <div id="input-section" class="game-inputs">
                 <input type="text" id="guess-name" class="theme-input" placeholder="Ülke Adı">
-                <input type="text" id="guess-capital" class="theme-input" placeholder="Başkent ">
-                <input type="number" id="guess-population" class="theme-input" placeholder="Nüfus ">
+                <input type="text" id="guess-capital" class="theme-input" placeholder="Başkent">
+                <input type="number" id="guess-population" class="theme-input" placeholder="Nüfus">
                 <button id="submit-guess" class="theme-btn disabled-btn" disabled>Tahmin Et</button>
                 <button id="skip-question" class="theme-btn skip-btn">Bu Soruyu Atla</button>
             </div>
@@ -54,20 +59,24 @@
                 <button id="next-question" class="theme-btn secondary-btn">Sonraki Soru</button>
             </div>
         </div>
-        
+
         <div id="end-screen" class="card-face text-center hidden" style="width: 450px;">
             <h2>🎉 Oyun Bitti!</h2>
             <p class="final-score-text">Toplam Puanın: <span id="final-score">0</span></p>
-            
+
             <div class="accordion-container">
                 <button class="accordion-btn" id="btn-personal">Son 10 Oyunun ▼</button>
                 <div class="accordion-content" id="content-personal">
-                    <table id="personal-board"></table>
+                    <div style="overflow-y: scroll; height: 200px;">
+                        <table id="personal-board"></table>
+                    </div>
                 </div>
 
                 <button class="accordion-btn" id="btn-global">Global Top 10 ▼</button>
                 <div class="accordion-content" id="content-global">
-                    <table id="global-board"></table>
+                    <div style="overflow-y: scroll; height: 200px;">
+                        <table id="global-board"></table>
+                    </div>
                 </div>
             </div>
 
@@ -77,4 +86,5 @@
     </div>
     <script src="script.js"></script>
 </body>
+
 </html>
