@@ -12,10 +12,6 @@
     <div id="toast-message" class="toast"></div>
 
     <div class="wrapper">
-        <div class="user-bar card-face">
-            <span id="player-name">Oyuncu: ...</span>
-            <button id="logout-btn" class="theme-btn small-btn">Çıkış Yap</button>
-        </div>
 
         <div id="loading-screen" class="card-face text-center">
             <h2>🌍 Dünya Haritası Çekiliyor...</h2>
@@ -23,6 +19,10 @@
         </div>
 
         <div id="difficulty-screen" class="card-face text-center hidden">
+            <div class="diff-user-bar">
+                <span id="player-name">Oyuncu: ...</span>
+                <button id="logout-btn" class="theme-btn small-btn">Çıkış Yap</button>
+            </div>
             <h2>Ana Sayfa</h2>
             <p class="subtitle">Oynamak istediğiniz seviyeyi belirleyin</p>
             <div class="diff-buttons">
@@ -34,6 +34,11 @@
         </div>
 
         <div id="game-container" class="card-face hidden">
+            <div class="user-bar-game">
+                <span id="player-name-game">Oyuncu: ...</span>
+                <button id="back-to-difficulty" class="theme-btn small-btn">Ana Sayfa</button>
+            </div>
+
             <div class="game-header">
                 <span id="question-counter">Soru: 1/10</span>
                 <span id="score-display">Puan: 0</span>
@@ -81,7 +86,7 @@
             </div>
 
             <button id="play-again" class="theme-btn" style="margin-top: 10px;">Tekrar Oyna</button>
-            <button id="go-home" class="theme-btn secondary-btn" style="margin-top:10px;">Ana Sayfaya Dön</button>
+            <button id="go-home-end" class="theme-btn secondary-btn" style="margin-top:10px;">Ana Sayfaya Dön</button>
         </div>
 
         <div id="scores-screen" class="card-face hidden">
@@ -106,6 +111,7 @@
 
             <button id="scores-back-btn" class="theme-btn secondary-btn" style="margin-top: 15px;">← Geri Dön</button>
         </div>
+
     </div>
     <script src="script.js"></script>
 </body>

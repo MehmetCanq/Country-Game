@@ -267,9 +267,35 @@ form {
     margin-bottom: 10px;
 }
 
-.user-bar span {
+.diff-user-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px 5px 15px 5px;
+    margin-bottom: 5px;
+    border-bottom: 2px solid #eee;
+}
+
+.diff-user-bar span {
     font-weight: 700;
-    font-size: 16px;
+    font-size: 15px;
+    color: #444;
+}
+
+.user-bar-game {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 0 12px 0;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #eee;
+}
+
+.user-bar-game span {
+    font-weight: 700;
+    font-size: 15px;
     color: #444;
 }
 

@@ -100,18 +100,29 @@ if (document.getElementById('game-container')) {
         window.location.href = "index.html";
     } else {
         document.getElementById('player-name').innerText = `Oyuncu: ${activeUser}`;
+        document.getElementById('player-name-game').innerText = `Oyuncu: ${activeUser}`;
         fetchCountries();
     }
 
-    document.getElementById('logout-btn').addEventListener('click', () => {
-        localStorage.removeItem('activeUser');
-        window.location.href = "index.html";
+
+    document.getElementById('back-to-difficulty').addEventListener('click', () => {
+        localStorage.removeItem('flagGameState');
+        if (animationFrameId) cancelAnimationFrame(animationFrameId);
+        document.getElementById('game-container').classList.add('hidden');
+        document.getElementById('end-screen').classList.add('hidden');
+        document.getElementById('difficulty-screen').classList.remove('hidden');
     });
 
-    document.getElementById('go-home').addEventListener('click', () => {
+    document.getElementById('go-home-end').addEventListener('click', () => {
+        localStorage.removeItem('flagGameState');
         document.getElementById('end-screen').classList.add('hidden');
-        document.getElementById('game-container').classList.add('hidden');
         document.getElementById('difficulty-screen').classList.remove('hidden');
+    });
+
+    document.getElementById('logout-btn').addEventListener('click', () => {
+        localStorage.removeItem('activeUser');
+        localStorage.removeItem('flagGameState');
+        window.location.href = 'index.html';
     });
 
     const btnPersonal = document.getElementById('btn-personal');
@@ -190,6 +201,30 @@ if (document.getElementById('game-container')) {
             const data = await res.json();
             allCountries = data.filter(c => c.population && c.population > 0);
 
+            const savedState = localStorage.getItem('flagGameState');
+            if (savedState) {
+                const state = JSON.parse(savedState);
+                gameCountries = state.gameCountryCodes.map(code =>
+                    allCountries.find(c => c.cca2 === code)
+                ).filter(Boolean);
+
+                if (gameCountries.length > 0) {
+                    currentDifficulty = state.currentDifficulty;
+                    baseTimeLimit = state.baseTimeLimit;
+                    currentRoundTime = state.currentRoundTime;
+                    currentQuestionIndex = state.currentQuestionIndex;
+                    totalScore = state.totalScore;
+
+                    setTimeout(() => {
+                        document.getElementById('loading-screen').classList.add('hidden');
+                        document.getElementById('difficulty-screen').classList.add('hidden');
+                        document.getElementById('game-container').classList.remove('hidden');
+                        loadQuestion();
+                    }, 1000);
+                    return;
+                }
+            }
+
             setTimeout(() => {
                 document.getElementById('loading-screen').classList.add('hidden');
                 document.getElementById('difficulty-screen').classList.remove('hidden');
@@ -206,13 +241,13 @@ if (document.getElementById('game-container')) {
 
             let filteredPool = [];
             if (currentDifficulty === 'easy') {
-                filteredPool = allCountries.filter(c => c.population >= 20000000);
+                filteredPool = allCountries.filter(c => c.population >= 80000000);
                 baseTimeLimit = 30;
             } else if (currentDifficulty === 'medium') {
-                filteredPool = allCountries.filter(c => c.population >= 2000000 && c.population < 20000000);
+                filteredPool = allCountries.filter(c => c.population >= 20000000 && c.population < 80000000);
                 baseTimeLimit = 25;
             } else if (currentDifficulty === 'hard') {
-                filteredPool = allCountries.filter(c => c.population < 2000000);
+                filteredPool = allCountries.filter(c => c.population < 20000000);
                 baseTimeLimit = 20;
             }
 
@@ -226,6 +261,18 @@ if (document.getElementById('game-container')) {
         });
     });
 
+    function saveGameState() {
+        const state = {
+            gameCountryCodes: gameCountries.map(c => c.cca2),
+            currentDifficulty,
+            baseTimeLimit,
+            currentRoundTime,
+            currentQuestionIndex,
+            totalScore
+        };
+        localStorage.setItem('flagGameState', JSON.stringify(state));
+    }
+
     function startGame() {
         currentQuestionIndex = 0;
         totalScore = 0;
@@ -235,6 +282,7 @@ if (document.getElementById('game-container')) {
         document.getElementById('game-container').classList.remove('hidden');
         history.pushState({ sayfa: 'oyun_divi' }, "");
 
+        saveGameState();
         loadQuestion();
     }
 
@@ -313,6 +361,7 @@ if (document.getElementById('game-container')) {
         document.getElementById('input-section').classList.remove('hidden');
         document.getElementById('feedback-section').classList.add('hidden');
 
+        saveGameState();
         startTimer();
     }
 
@@ -449,6 +498,7 @@ if (document.getElementById('game-container')) {
     }
 
     function endGame() {
+        localStorage.removeItem('flagGameState');
         document.getElementById('game-container').classList.add('hidden');
         document.getElementById('end-screen').classList.remove('hidden');
         document.getElementById('final-score').innerText = totalScore;
@@ -462,7 +512,24 @@ if (document.getElementById('game-container')) {
     }
 
     document.getElementById('play-again').addEventListener('click', () => {
+        let filteredPool = [];
+        if (currentDifficulty === 'easy') {
+            filteredPool = allCountries.filter(c => c.population >= 80000000);
+            baseTimeLimit = 30;
+        } else if (currentDifficulty === 'medium') {
+            filteredPool = allCountries.filter(c => c.population >= 20000000 && c.population < 80000000);
+            baseTimeLimit = 25;
+        } else if (currentDifficulty === 'hard') {
+            filteredPool = allCountries.filter(c => c.population < 20000000);
+            baseTimeLimit = 20;
+        }
+
+        currentRoundTime = baseTimeLimit;
+        let shuffled = filteredPool.sort(() => 0.5 - Math.random());
+        gameCountries = shuffled.slice(0, 10);
+
+        localStorage.removeItem('flagGameState');
         document.getElementById('end-screen').classList.add('hidden');
-        document.getElementById('difficulty-screen').classList.remove('hidden');
+        startGame();
     });
 }
