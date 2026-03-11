@@ -109,22 +109,74 @@ if (document.getElementById('game-container')) {
     });
 
     document.getElementById('go-home').addEventListener('click', () => {
-        window.location.href = "index.html";
+        document.getElementById('end-screen').classList.add('hidden');
+        document.getElementById('game-container').classList.add('hidden');
+        document.getElementById('difficulty-screen').classList.remove('hidden');
     });
 
     const btnPersonal = document.getElementById('btn-personal');
     const contentPersonal = document.getElementById('content-personal');
-    const btnGlobal = document.getElementById('btn-global');
-    const contentGlobal = document.getElementById('content-global');
+
+    const btnMyskor = document.getElementById('btn-myskor');
+    const contentMyskor = document.getElementById('content-myskor');
 
     btnPersonal.addEventListener('click', () => {
         btnPersonal.classList.toggle('active');
         contentPersonal.classList.toggle('show');
     });
 
-    btnGlobal.addEventListener('click', () => {
-        btnGlobal.classList.toggle('active');
-        contentGlobal.classList.toggle('show');
+    btnMyskor.addEventListener('click', () => {
+        btnMyskor.classList.toggle('active');
+        contentMyskor.classList.toggle('show');
+    });
+
+
+    function fillScoresScreen() {
+        const scores = JSON.parse(localStorage.getItem('flagGameScores')) || [];
+
+        const globalScores = [...scores].sort((a, b) => b.score - a.score).slice(0, 10);
+        let globalHTML = `<tr><th>#</th><th>Oyuncu</th><th>Puan</th></tr>`;
+        if (globalScores.length === 0) {
+            globalHTML += `<tr><td colspan="3" style="text-align:center;">Henüz skor yok.</td></tr>`;
+        } else {
+            globalScores.forEach((s, i) => {
+                const medal = i === 0 ? '1' : i === 1 ? '2' : i === 2 ? '3' : `${i + 1}`;
+                globalHTML += `<tr><td>${medal}</td><td>${s.user}</td><td>${s.score}</td></tr>`;
+            });
+        }
+        document.getElementById('scores-global-board').innerHTML = globalHTML;
+
+
+        const personalScores = scores.filter(s => s.user === activeUser).reverse().slice(0, 10);
+        let personalHTML = `<tr><th>#</th><th>Tarih</th><th>Puan</th></tr>`;
+        if (personalScores.length === 0) {
+            personalHTML += `<tr><td colspan="3" style="text-align:center;">Henüz oyun yok.</td></tr>`;
+        } else {
+            personalScores.forEach((s, i) => {
+                personalHTML += `<tr><td>${i + 1}.</td><td>${s.date}</td><td>${s.score}</td></tr>`;
+            });
+        }
+        document.getElementById('myskor-board').innerHTML = personalHTML;
+    }
+
+    document.getElementById('open-scores-btn').addEventListener('click', () => {
+        fillScoresScreen();
+        document.getElementById('scores-btn-global').classList.remove('active');
+        document.getElementById('scores-content-global').classList.remove('show');
+
+        document.getElementById('difficulty-screen').classList.add('hidden');
+        document.getElementById('scores-screen').classList.remove('hidden');
+
+    });
+
+    document.getElementById('scores-btn-global').addEventListener('click', () => {
+        document.getElementById('scores-btn-global').classList.toggle('active');
+        document.getElementById('scores-content-global').classList.toggle('show');
+    });
+
+    document.getElementById('scores-back-btn').addEventListener('click', () => {
+        document.getElementById('scores-screen').classList.add('hidden');
+        document.getElementById('difficulty-screen').classList.remove('hidden');
     });
 
     async function fetchCountries() {
@@ -271,7 +323,7 @@ if (document.getElementById('game-container')) {
         let feedbackMsg = "";
 
         if (isTimeOut) {
-            feedbackMsg = `⏰ <b>SÜRE DOLDU! Puan Alınamadı.</b><br><br>Ülke: ${actualName}<br>Başkent: ${actualCapital || "Yok"}<br>Nüfus: ${actualPop.toLocaleString('tr-TR')}`;
+            feedbackMsg = `<b>SÜRE DOLDU! Puan Alınamadı.</b><br>Ülke: ${actualName}<br>Başkent: ${actualCapital || "Yok"}<br>Nüfus: ${actualPop.toLocaleString('tr-TR')}`;
         } else {
             const guessNameRaw = document.getElementById('guess-name').value.trim();
             const guessCapitalRaw = document.getElementById('guess-capital').value.trim();
@@ -317,7 +369,7 @@ if (document.getElementById('game-container')) {
 
         const feedbackDiv = document.getElementById('feedback-text');
         if (points === 30 && !isTimeOut) {
-            feedbackDiv.innerHTML = "✨ Kusursuz! 30 Puan kazandın.";
+            feedbackDiv.innerHTML = "Kusursuz 30 Puan kazandın.";
             feedbackDiv.className = "feedback-text success";
         } else {
             let baslik = isTimeOut ? "0 Puan" : `Bu sorudan <b>${points}</b> puan aldın.`;
@@ -335,12 +387,19 @@ if (document.getElementById('game-container')) {
     document.getElementById('skip-question').addEventListener('click', () => {
         if (animationFrameId) cancelAnimationFrame(animationFrameId);
         currentRoundTime = Math.max(5, currentRoundTime - 5);
-        currentQuestionIndex++;
-        if (currentQuestionIndex < 10) {
-            loadQuestion();
-        } else {
-            endGame();
-        }
+
+        const country = gameCountries[currentQuestionIndex];
+        const actualName = country.name.common;
+        const actualCapital = country.capital ? country.capital[0] : "Yok";
+        const actualPop = country.population;
+
+        const feedbackDiv = document.getElementById('feedback-text');
+        feedbackDiv.innerHTML = `<b>Cevaplar</b><br>Ülke: <b>${actualName}</b><br>Başkent: <b>${actualCapital}</b><br>Nüfus: <b>${actualPop.toLocaleString('tr-TR')}</b>`;
+        feedbackDiv.className = "feedback-text error";
+
+        document.getElementById('input-section').classList.add('hidden');
+        document.getElementById('feedback-section').classList.remove('hidden');
+        document.getElementById('score-display').innerText = `Puan: ${totalScore}`;
     });
 
     document.getElementById('next-question').addEventListener('click', () => {
@@ -367,20 +426,21 @@ if (document.getElementById('game-container')) {
         let scores = JSON.parse(localStorage.getItem('flagGameScores')) || [];
 
         let personalScores = scores.filter(s => s.user === activeUser).reverse().slice(0, 10);
-        let personalHTML = `<tr><th>Tarih</th><th>Puan</th></tr>`;
-        if (personalScores.length === 0) personalHTML += `<tr><td colspan="2" style="text-align:center;">Henüz oyun yok.</td></tr>`;
-        personalScores.forEach(s => {
-            personalHTML += `<tr><td>${s.date}</td><td>${s.score}</td></tr>`;
+        let personalHTML = `<tr><th>#</th><th>Tarih</th><th>Puan</th></tr>`;
+        if (personalScores.length === 0) personalHTML += `<tr><td colspan="3" style="text-align:center;">Henüz oyun yok.</td></tr>`;
+        personalScores.forEach((s, i) => {
+            personalHTML += `<tr><td>${i + 1}.</td><td>${s.date}</td><td>${s.score}</td></tr>`;
         });
         document.getElementById('personal-board').innerHTML = personalHTML;
 
-        let globalScores = [...scores].sort((a, b) => b.score - a.score).slice(0, 10);
-        let globalHTML = `<tr><th>Oyuncu</th><th>Puan</th></tr>`;
-        if (globalScores.length === 0) globalHTML += `<tr><td colspan="2" style="text-align:center;">Henüz skor yok.</td></tr>`;
-        globalScores.forEach(s => {
-            globalHTML += `<tr><td>${s.user}</td><td>${s.score}</td></tr>`;
+        let myTopScores = scores.filter(s => s.user === activeUser).sort((a, b) => b.score - a.score).slice(0, 10);
+        let myskorHTML = `<tr><th>#</th><th>Tarih</th><th>Puan</th></tr>`;
+        if (myTopScores.length === 0) myskorHTML += `<tr><td colspan="3" style="text-align:center;">Henüz oyun yok.</td></tr>`;
+        myTopScores.forEach((s, i) => {
+            const medal = i === 0 ? '1' : i === 1 ? '2' : i === 2 ? '3' : `${i + 1}.`;
+            myskorHTML += `<tr><td>${medal}</td><td>${s.date}</td><td>${s.score}</td></tr>`;
         });
-        document.getElementById('global-board').innerHTML = globalHTML;
+        document.getElementById('content-myskor').innerHTML = `<div style="overflow-y: scroll; height: 200px;"><table>${myskorHTML}</table></div>`;
     }
 
     function endGame() {
@@ -390,8 +450,8 @@ if (document.getElementById('game-container')) {
 
         btnPersonal.classList.remove('active');
         contentPersonal.classList.remove('show');
-        btnGlobal.classList.remove('active');
-        contentGlobal.classList.remove('show');
+        btnMyskor.classList.remove('active');
+        contentMyskor.classList.remove('show');
 
         saveScore();
     }

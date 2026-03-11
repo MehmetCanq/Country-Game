@@ -23,13 +23,13 @@
         </div>
 
         <div id="difficulty-screen" class="card-face text-center hidden" style="width: 450px;">
-            <h2>Zorluk Seçimi</h2>
+            <h2>Ana Sayfa</h2>
             <p class="subtitle">Oynamak istediğiniz seviyeyi belirleyin</p>
             <div class="diff-buttons">
                 <button class="theme-btn diff-btn" data-diff="easy">Kolay</button>
                 <button class="theme-btn diff-btn medium-btn" data-diff="medium">Orta</button>
                 <button class="theme-btn diff-btn hard-btn" data-diff="hard">Zor</button>
-                <button class="skor-btn" data-diff="skor">Skorlar</button>
+                <button class="skor-btn" id="open-scores-btn"> Skorlar</button>
             </div>
         </div>
 
@@ -61,7 +61,7 @@
         </div>
 
         <div id="end-screen" class="card-face text-center hidden" style="width: 450px;">
-            <h2>🎉 Oyun Bitti!</h2>
+            <h2> Oyun Bitti!</h2>
             <p class="final-score-text">Toplam Puanın: <span id="final-score">0</span></p>
 
             <div class="accordion-container">
@@ -72,16 +72,32 @@
                     </div>
                 </div>
 
-                <button class="accordion-btn" id="btn-global">Global Top 10 ▼</button>
-                <div class="accordion-content" id="content-global">
+                <button class="accordion-btn" id="btn-myskor">En iyi 10 Oyunun ▼</button>
+                <div class="accordion-content" id="content-myskor">
                     <div style="overflow-y: scroll; height: 200px;">
-                        <table id="global-board"></table>
+                        <table id="myskor-board"></table>
                     </div>
                 </div>
             </div>
 
             <button id="play-again" class="theme-btn" style="margin-top: 10px;">Tekrar Oyna</button>
             <button id="go-home" class="theme-btn secondary-btn" style="margin-top:10px;">Ana Sayfaya Dön</button>
+        </div>
+
+        <div id="scores-screen" class="card-face hidden" style="width: 450px;">
+            <h2 style="margin-bottom:5px;">Global Skorlar</h2>
+            <p class="subtitle">Global skor tablosu</p>
+
+            <div class="accordion-container">
+                <button class="accordion-btn" id="scores-btn-global"> Global Top 10 ▼</button>
+                <div class="accordion-content" id="scores-content-global">
+                    <div style="overflow-y: scroll; height: 200px;">
+                        <table id="scores-global-board"></table>
+                    </div>
+                </div>
+            </div>
+
+            <button id="scores-back-btn" class="theme-btn secondary-btn" style="margin-top: 15px;">← Geri Dön</button>
         </div>
     </div>
     <script src="script.js"></script>
