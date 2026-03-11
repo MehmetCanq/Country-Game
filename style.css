@@ -12,7 +12,7 @@ body {
     align-items: center;
     background: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
     color: #333;
-    overflow: hidden;
+    overflow-y: auto;
 }
 
 .wrapper {
@@ -22,6 +22,7 @@ body {
     gap: 20px;
     width: 100%;
     padding: 20px;
+    box-sizing: border-box;
 }
 
 .hidden {
@@ -260,7 +261,8 @@ form {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 450px;
+    max-width: 450px;
+    width: 100%;
     padding: 15px 25px;
     margin-bottom: 10px;
 }
@@ -478,4 +480,24 @@ tr:last-child td {
 
 .toast.show {
     top: 30px;
+}
+
+.card-face {
+    max-width: 450px;
+    width: 100%;
+}
+
+@media (max-width: 480px) {
+    .wrapper {
+        padding: 12px;
+        gap: 12px;
+    }
+
+    .card-face {
+        padding: 25px 18px;
+    }
+
+    .flag-wrapper {
+        height: 180px;
+    }
 }

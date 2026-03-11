@@ -146,7 +146,6 @@ if (document.getElementById('game-container')) {
         }
         document.getElementById('scores-global-board').innerHTML = globalHTML;
 
-
         const personalScores = scores.filter(s => s.user === activeUser).reverse().slice(0, 10);
         let personalHTML = `<tr><th>#</th><th>Tarih</th><th>Puan</th></tr>`;
         if (personalScores.length === 0) {
@@ -156,22 +155,28 @@ if (document.getElementById('game-container')) {
                 personalHTML += `<tr><td>${i + 1}.</td><td>${s.date}</td><td>${s.score}</td></tr>`;
             });
         }
-        document.getElementById('myskor-board').innerHTML = personalHTML;
+        document.getElementById('scores-personal-board').innerHTML = personalHTML;
     }
 
     document.getElementById('open-scores-btn').addEventListener('click', () => {
         fillScoresScreen();
         document.getElementById('scores-btn-global').classList.remove('active');
         document.getElementById('scores-content-global').classList.remove('show');
+        document.getElementById('scores-btn-personal').classList.remove('active');
+        document.getElementById('scores-content-personal').classList.remove('show');
 
         document.getElementById('difficulty-screen').classList.add('hidden');
         document.getElementById('scores-screen').classList.remove('hidden');
-
     });
 
     document.getElementById('scores-btn-global').addEventListener('click', () => {
         document.getElementById('scores-btn-global').classList.toggle('active');
         document.getElementById('scores-content-global').classList.toggle('show');
+    });
+
+    document.getElementById('scores-btn-personal').addEventListener('click', () => {
+        document.getElementById('scores-btn-personal').classList.toggle('active');
+        document.getElementById('scores-content-personal').classList.toggle('show');
     });
 
     document.getElementById('scores-back-btn').addEventListener('click', () => {

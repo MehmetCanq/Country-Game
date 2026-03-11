@@ -22,7 +22,7 @@
             <p class="subtitle">Veriler hazırlanıyor, lütfen bekleyin.</p>
         </div>
 
-        <div id="difficulty-screen" class="card-face text-center hidden" style="width: 450px;">
+        <div id="difficulty-screen" class="card-face text-center hidden">
             <h2>Ana Sayfa</h2>
             <p class="subtitle">Oynamak istediğiniz seviyeyi belirleyin</p>
             <div class="diff-buttons">
@@ -33,7 +33,7 @@
             </div>
         </div>
 
-        <div id="game-container" class="card-face hidden" style="width: 450px;">
+        <div id="game-container" class="card-face hidden">
             <div class="game-header">
                 <span id="question-counter">Soru: 1/10</span>
                 <span id="score-display">Puan: 0</span>
@@ -60,7 +60,7 @@
             </div>
         </div>
 
-        <div id="end-screen" class="card-face text-center hidden" style="width: 450px;">
+        <div id="end-screen" class="card-face text-center hidden">
             <h2> Oyun Bitti!</h2>
             <p class="final-score-text">Toplam Puanın: <span id="final-score">0</span></p>
 
@@ -84,15 +84,22 @@
             <button id="go-home" class="theme-btn secondary-btn" style="margin-top:10px;">Ana Sayfaya Dön</button>
         </div>
 
-        <div id="scores-screen" class="card-face hidden" style="width: 450px;">
-            <h2 style="margin-bottom:5px;">Global Skorlar</h2>
-            <p class="subtitle">Global skor tablosu</p>
+        <div id="scores-screen" class="card-face hidden">
+            <h2 style="margin-bottom:5px;">Skorlar</h2>
+            <p class="subtitle">Skor tablosu</p>
 
             <div class="accordion-container">
                 <button class="accordion-btn" id="scores-btn-global"> Global Top 10 ▼</button>
                 <div class="accordion-content" id="scores-content-global">
                     <div style="overflow-y: scroll; height: 200px;">
                         <table id="scores-global-board"></table>
+                    </div>
+                </div>
+
+                <button class="accordion-btn" id="scores-btn-personal"> Kişisel Skorlarım ▼</button>
+                <div class="accordion-content" id="scores-content-personal">
+                    <div style="overflow-y: scroll; height: 200px;">
+                        <table id="scores-personal-board"></table>
                     </div>
                 </div>
             </div>
